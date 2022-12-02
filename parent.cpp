@@ -16,20 +16,23 @@ vector<pid_t> pid_array;
 int i = 1;
 
 void handle_from_red(int sig) {
-    pid_array[i];
+    kill(pid_array[i], SIGCONT);
     i++;
    if(i == 6) {
-       system("pkill child");
+//       system("pkill child");
+       cout << "the red win";
 //       goto label1
    }
 }
 int j = 6;
 
 void handle_from_green(int sig) {
-    pid_array[j];
+    kill(pid_array[j], SIGCONT);
     j++;
     if(j == 11) {
-        system("pkill child");
+//        system("pkill child");
+        cout << "the green win";
+
 //        goto label1;
     }
 
