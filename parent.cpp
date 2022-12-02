@@ -24,7 +24,8 @@ int main(int argc, char *argv[]) {
             exit(-1);
         }
         if (pid == 0){
-            kill(getpid(), SIGSTOP);;
+            kill(getpid(), SIGSTOP);
+            break;
         } else {
             cout << pid << "  " << getppid() << endl;
             pid_array.push_back(pid);
@@ -33,21 +34,20 @@ int main(int argc, char *argv[]) {
 
     for (int i = 0; i < 5; ++i) {
         kill(pid_array[i], SIGCONT);
-        char* argv[] = { "child", NULL};
-        result = execv("./child", argv);
-        if (result == -1) {
-            perror("execv fail");
-            exit(-2);
+        if (pid == 0) {
+            char* args[] = {"child", NULL};
+            result = execv("./child", args);
+            if (result == -1) {
+                perror("execv fail");
+                exit(-2);
+            }
         }
-
     }
 
     cout << "Size : " << pid_array.size() << endl;
     for (int id : pid_array){
         kill(id, SIGKILL);
     }
-
-
 
 
     return 0;
