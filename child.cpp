@@ -11,7 +11,6 @@ int generate_random_number(int lower, int upper)
     srand(s);
     int num = (rand() % (upper - lower + 1)) + lower;
     return num;
-
 }
 int main(int argc, char *argv[]) {
     cout << "Hello, World!, child" << endl;

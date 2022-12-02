@@ -14,6 +14,35 @@ using namespace std;
 
 
 int main(int argc, char *argv[]) {
-    cout << "Hello, World!, parent" << endl;
+    vector<pid_t> pid_array;
+    pid_t pid;
+    int result;
+    for (int i = 0; i < 10; ++i) {
+        pid = fork();
+        if (pid == -1) {
+            perror("the fork fail");
+        }
+        if (pid == 0){
+            kill(getpid(), SIGSTOP);
+        } else {
+            cout << pid << endl;
+            pid_array.push_back(pid);
+        }
+    }
+
+    for (int i = 0; i < 5; ++i) {
+        kill(pid_array[i], SIGCONT);
+        char* argv[] = { "child", NULL};
+        result = execv("./child", argv);
+    }
+
+    cout << "Size : " << pid_array.size() << endl;
+    for (int id : pid_array){
+        kill(id, SIGKILL);
+    }
+
+
+
+
     return 0;
 }
