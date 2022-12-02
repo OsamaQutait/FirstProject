@@ -21,11 +21,12 @@ int main(int argc, char *argv[]) {
         pid = fork();
         if (pid == -1) {
             perror("the fork fail");
+            exit(-1);
         }
         if (pid == 0){
-            kill(getpid(), SIGSTOP);
+            kill(getpid(), SIGSTOP);;
         } else {
-            cout << pid << endl;
+            cout << pid << "  " << getppid() << endl;
             pid_array.push_back(pid);
         }
     }
@@ -34,6 +35,11 @@ int main(int argc, char *argv[]) {
         kill(pid_array[i], SIGCONT);
         char* argv[] = { "child", NULL};
         result = execv("./child", argv);
+        if (result == -1) {
+            perror("execv fail");
+            exit(-2);
+        }
+
     }
 
     cout << "Size : " << pid_array.size() << endl;
