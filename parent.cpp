@@ -63,7 +63,6 @@ int main(int argc, char *argv[]) {
             }
 
         } else {
-//            cout << pid << "  " << getppid() << endl;
             pid_array.push_back(pid);
             parent_id = getppid();
         }
