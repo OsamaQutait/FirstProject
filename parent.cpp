@@ -8,6 +8,7 @@ int j = 6;
 
 void handle_sigusr1(int sig) {
     cout << "Red team player move "<< location_map[i] << endl;
+    fflush(stdout);
     kill(pid_array[i], SIGUSR1);
     i++;
     if(i == 6) {
@@ -20,6 +21,7 @@ void handle_sigusr1(int sig) {
 
 void handle_sigusr2(int sig) {
     cout <<  "Green team player move " << location_map[j-5] << endl;
+    fflush(stdout);
     kill(pid_array[j], SIGUSR1);
     j++;
     if(j == 11) {
