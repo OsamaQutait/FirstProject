@@ -1,5 +1,5 @@
 #include "header.h"
-
+pid_t parent_id;
 vector<pid_t> pid_array;
 int i = 1;
 int j = 6;
@@ -9,6 +9,8 @@ void handle_sigusr1(int sig) {
     i++;
     if(i == 6) {
         cout << "the red win"<< endl;
+        fflush(stdout);
+//        kill(parent_id, SIGSTOP);
         exit(1);
     }
 }
@@ -18,6 +20,8 @@ void handle_sigusr2(int sig) {
     j++;
     if(j == 11) {
         cout << "the green win" << endl;
+        fflush(stdout);
+//        kill(parent_id, SIGSTOP);
         exit(1);
     }
 }
@@ -51,8 +55,10 @@ int main(int argc, char *argv[]) {
         } else {
             cout << pid << "  " << getppid() << endl;
             pid_array.push_back(pid);
+            parent_id = getppid();
         }
     }
+//    cout <<  << endl;
     sleep(1);
     kill(pid_array[0], SIGUSR1);//Red first one
     kill(pid_array[5], SIGUSR1);//Blue first one
