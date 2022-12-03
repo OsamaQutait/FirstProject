@@ -14,7 +14,6 @@ void handle_sigusr1(int sig) {
     if(i == 6) {
         cout << "the red win"<< endl;
         fflush(stdout);
-//        kill(parent_id, SIGSTOP);
         exit(1);
     }
 }
@@ -27,7 +26,6 @@ void handle_sigusr2(int sig) {
     if(j == 11) {
         cout << "the green win" << endl;
         fflush(stdout);
-//        kill(parent_id, SIGSTOP);
         exit(1);
     }
 }
@@ -70,7 +68,6 @@ int main(int argc, char *argv[]) {
             parent_id = getppid();
         }
     }
-//    cout <<  << endl;
     sleep(1);
     kill(pid_array[0], SIGUSR1);//Red first one
     kill(pid_array[5], SIGUSR1);//Blue first one
@@ -81,7 +78,6 @@ int main(int argc, char *argv[]) {
     int status = 0;
     while ((wpid = wait(&status)) > 0);
 
-//    cout << "Size : " << pid_array.size() << endl;
     for (int id : pid_array){
         kill(id, SIGKILL);
     }
