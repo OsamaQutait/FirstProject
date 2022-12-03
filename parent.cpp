@@ -1,10 +1,13 @@
 #include "header.h"
 pid_t parent_id;
 vector<pid_t> pid_array;
+
+unordered_map<int, string> location_map;
 int i = 1;
 int j = 6;
 
 void handle_sigusr1(int sig) {
+    cout << "Red team player move "<< location_map[i] << endl;
     kill(pid_array[i], SIGUSR1);
     i++;
     if(i == 6) {
@@ -16,6 +19,7 @@ void handle_sigusr1(int sig) {
 }
 
 void handle_sigusr2(int sig) {
+    cout <<  "Green team player move " << location_map[j-5] << endl;
     kill(pid_array[j], SIGUSR1);
     j++;
     if(j == 11) {
@@ -27,6 +31,12 @@ void handle_sigusr2(int sig) {
 }
 
 int main(int argc, char *argv[]) {
+
+    location_map[1] = "from A1 to A2";
+    location_map[2] = "from A2 to A3";
+    location_map[3] = "from A3 to A4";
+    location_map[4] = "from A4 to A5";
+    location_map[5] = "from A5 to A1";
 
     pid_t pid;
     int result;
@@ -53,7 +63,7 @@ int main(int argc, char *argv[]) {
             }
 
         } else {
-            cout << pid << "  " << getppid() << endl;
+//            cout << pid << "  " << getppid() << endl;
             pid_array.push_back(pid);
             parent_id = getppid();
         }

@@ -10,4 +10,5 @@ using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unordered_map>
 #endif //FIRSTPROJECT_HEADER_H
