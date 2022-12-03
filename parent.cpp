@@ -1,41 +1,25 @@
-#include <iostream>
-#include <iostream>
-using namespace std;
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <vector>
-#include <signal.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
+#include "header.h"
+
 vector<pid_t> pid_array;
-
 int i = 1;
-
-void handle_from_red(int sig) {
-    kill(pid_array[i], SIGCONT);
-    i++;
-   if(i == 6) {
-//       system("pkill child");
-       cout << "the red win";
-//       goto label1
-   }
-}
 int j = 6;
 
-void handle_from_green(int sig) {
-    kill(pid_array[j], SIGCONT);
+void handle_sigusr1(int sig) {
+    kill(pid_array[i], SIGUSR1);
+    i++;
+    if(i == 6) {
+        cout << "the red win"<< endl;
+        exit(1);
+    }
+}
+
+void handle_sigusr2(int sig) {
+    kill(pid_array[j], SIGUSR1);
     j++;
     if(j == 11) {
-//        system("pkill child");
-        cout << "the green win";
-
-//        goto label1;
+        cout << "the green win" << endl;
+        exit(1);
     }
-
 }
 
 int main(int argc, char *argv[]) {
@@ -57,7 +41,7 @@ int main(int argc, char *argv[]) {
             else{
                 type = "green";
             }
-            char* args[] = {"child",type,  NULL};
+            char* args[] = {"child", type, NULL};
             result = execv("./child", args);
             if (result == -1) {
                 perror("execv fail");
@@ -69,20 +53,19 @@ int main(int argc, char *argv[]) {
             pid_array.push_back(pid);
         }
     }
+    sleep(1);
+    kill(pid_array[0], SIGUSR1);//Red first one
+    kill(pid_array[5], SIGUSR1);//Blue first one
+    signal(SIGUSR1, &handle_sigusr1);
+    signal(SIGUSR2, &handle_sigusr2);
 
-    kill(pid_array[0], SIGCONT);//Red first one
-    kill(pid_array[5], SIGCONT);//Blue first one
-    signal(SIGUSR1, &handle_from_red);
-    signal(SIGUSR2, &handle_from_green);
+    pid_t wpid;
+    int status = 0;
+    while ((wpid = wait(&status)) > 0);
 
-    while(1);
-
-    cout << "Size : " << pid_array.size() << endl;
+//    cout << "Size : " << pid_array.size() << endl;
     for (int id : pid_array){
         kill(id, SIGKILL);
     }
-
-    label:
-
     return 0;
 }

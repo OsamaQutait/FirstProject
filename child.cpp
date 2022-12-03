@@ -1,10 +1,7 @@
-#include <iostream>
+#include "header.h"
 
-using namespace std;
-
-#include <unistd.h>
-#include <signal.h>
-#include <string.h>
+const char *type;
+int speed;
 
 
 int generate_Speed(int lower, int upper) {
@@ -17,37 +14,25 @@ int generate_Speed(int lower, int upper) {
     int num = (rand() % (upper - lower + 1)) + lower;
     return num;
 }
-//
-//void signal_catcher1(int sig) {
-//
-//
-//}
+
+void handle_sigusr1(int sig) {
+    if (!strcmp(type, "red")) {
+        cout << type << " " << speed << " " << getpid() <<endl;
+        kill(getppid(), SIGUSR1);
+    }
+
+    if (!strcmp(type, "green")) {
+        cout << type << " " << speed << " " << getpid() <<endl;
+        kill(getppid(), SIGUSR2);
+    }
+}
 
 int main(int argc, char *argv[]) {
-    cout << "Hello, World!, child" << endl;
-
-    const char *type = argv[1];
-    cout << type << endl;
-
-
-    kill(getpid(), SIGSTOP);
-    int speed = generate_Speed(80, 100);
-    cout << speed << endl;
-
-    usleep(speed * 20000);
-    //REd sigusr1
-
-    if ( strcmp(type, "red") == 0) {
-        cout << "iam in the red if";
-
-             kill(getppid(), SIGUSR1);
-    }
-    if (strcmp(type, "green") == 0) {
-        cout << "iam in the green if";
-
-        kill(getppid(), SIGUSR2);
-        //REd sigusr2
-    }
+//    cout << "Hello, World!, child" << endl;
+    type = argv[1];
+    speed = generate_Speed(70, 99);
+    speed = (useconds_t)(10000*speed);
+    usleep(speed);
+    signal(SIGUSR1, &handle_sigusr1);
     pause();
-    return 0;
 }
