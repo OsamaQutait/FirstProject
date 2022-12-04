@@ -1,8 +1,7 @@
 #include "header.h"
 
 const char *type;
-int speed;
-
+int speed = 0;
 
 int generate_Speed(int lower, int upper) {
     int s, numb;
@@ -16,10 +15,10 @@ int generate_Speed(int lower, int upper) {
 }
 
 void handle_sigusr1(int sig) {
-
     speed = generate_Speed(70, 99);
     speed = (useconds_t)(10000*speed);
     usleep(speed);
+
     if (!strcmp(type, "red")) {
         kill(getppid(), SIGUSR1);
     }
@@ -27,6 +26,8 @@ void handle_sigusr1(int sig) {
     if (!strcmp(type, "green")) {
         kill(getppid(), SIGUSR2);
     }
+
+    pause();
 }
 
 int main(int argc, char *argv[]) {

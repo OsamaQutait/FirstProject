@@ -1,11 +1,11 @@
 #include "header.h"
 pid_t parent_id;
 vector<pid_t> pid_array;
-
+int N = 5;
 unordered_map<int, string> location_map;
 int i = 1;
 int j = 6;
-
+int flag = 0;
 void handle_sigusr1(int sig) {
     cout << "Red team player move "<< location_map[i] << endl;
     fflush(stdout);
@@ -31,6 +31,9 @@ void handle_sigusr2(int sig) {
 }
 
 int main(int argc, char *argv[]) {
+    cout << "enter the number of round that you wont,"
+            " if you dont enter any thing the difolt number is 5" << endl;
+    cin >> N;
 
     location_map[1] = "from A1 to A2";
     location_map[2] = "from A2 to A3";
