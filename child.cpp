@@ -26,12 +26,12 @@ void handle_sigusr1(int sig) {
     if (!strcmp(type, "green")) {
         kill(getppid(), SIGUSR2);
     }
-
-    pause();
+//    pause();
+//    while (1);
 }
 
 int main(int argc, char *argv[]) {
     type = argv[1];
     signal(SIGUSR1, &handle_sigusr1);
-    pause();
+    while (1);
 }
