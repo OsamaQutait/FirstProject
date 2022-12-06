@@ -1,131 +1,82 @@
 #include "header.h"
 pid_t parent_id;
 vector<pid_t> pid_array;
-int N = 5;
+int N = 0;
 unordered_map<int, string> location_map;
 int i = 1;
 int j = 6;
 int flag = 0;
 int stop = 0;
-int loser_team = 0;
 int rad_team_score = 0;
 int green_team_score = 0;
 
-void handle_sigusr1(int sig){
+void handle_sigusr1(int sig) {
     cout << "Red team player move "<< location_map[i] << endl;
     fflush(stdout);
     kill(pid_array[i], SIGUSR1);
     i++;
-    if (i == 6) {
-        if (!stop) {
-            loser_team = 1;
-            stop = 1;
-            rad_team_score++;
-        } else if (loser_team) {
-            i = 1;
-            j = 6;
-            usleep(500000);
+    if(i == 6 && !stop) {
+        rad_team_score++;
+        N++;
+        cout << "Round " << N << " finish" << endl;
+        fflush(stdout);
+        stop = 1;
+        cout << "the red win"<< endl;
+        fflush(stdout);
+        if( rad_team_score >= 5 || green_team_score >= 5 ) {
+            cout << "End of game " << endl;
+            cout << "red team score "<< rad_team_score << endl;
+            cout << "green team score " << green_team_score << endl;
+            exit(0);
+        }
+        i = 1;
+        j = 6;
+        if (flag) {
+            sleep(2);
             kill(pid_array[0], SIGUSR1);//Red first one
             kill(pid_array[5], SIGUSR1);//Blue first one
-            loser_team = 0;
-            stop = 0;
-            N--;
-
-            if (N == 0) {
-                cout << "End of game " << endl;
-                cout << "red team score "<< rad_team_score << endl;
-                cout << "green team score " << green_team_score << endl;
-                exit(2);
-            }
+            flag = 0;
+        } else {
+            flag = 1;
         }
+        stop = 0;
     }
 }
 
-void handle_sigusr2(int sig){
-    cout << "Green team player move "<< location_map[i] << endl;
+void handle_sigusr2(int sig) {
+    cout <<  "Green team player move " << location_map[j-5] << endl;
     fflush(stdout);
     kill(pid_array[j], SIGUSR1);
     j++;
-    if (j == 11) {
-        if (!stop){
-            loser_team = 1;
-            stop = 1;
-            green_team_score++;
-        } else if (loser_team) {
-            i = 1;
-            j = 6;
-            usleep(500000);
+    if(j == 11 && !stop) {
+        green_team_score++;
+        N++;
+        cout << "Round " << N << " finish" << endl;
+        fflush(stdout);
+        stop = 1;
+        cout << "the green win"<< endl;
+        fflush(stdout);
+        if( rad_team_score >= 5 || green_team_score >= 5 ) {
+            cout << "End of game " << endl;
+            cout << "red team score "<< rad_team_score << endl;
+            cout << "green team score " << green_team_score << endl;
+            exit(0);
+        }
+        i = 1;
+        j = 6;
+        if (flag) {
+            sleep(2);
             kill(pid_array[0], SIGUSR1);//Red first one
             kill(pid_array[5], SIGUSR1);//Blue first one
-            loser_team = 0;
-            stop = 0;
-            N--;
-            if (N == 0) {
-                cout << "End of game " << endl;
-                cout << "red team score "<< rad_team_score << endl;
-                cout << "green team score" << green_team_score << endl;
-                exit(2);
-            }
+            flag = 0;
+        } else {
+            flag = 1;
         }
+        stop = 0;
     }
 }
 
-//void handle_sigusr1(int sig) {
-//    cout << "Red team player move "<< location_map[i] << endl;
-//    fflush(stdout);
-//    if (!flag) {
-//        kill(pid_array[i], SIGUSR1);
-//    }
-//    i++;
-//    if(i == 6 && !flag) {
-//        rad_team_score++;
-//        flag = 1;
-//        cout << "the red win"<< endl;
-//        fflush(stdout);
-//        usleep(500000);
-//        flag = 0;
-//        cout << "round "<< N << " " << "has been completed" << endl;
-//        N--;
-//        if (N == 0){
-//            cout << "end game" << endl;
-//            exit(1);
-//        }
-//        kill(pid_array[0], SIGUSR1);//Red first one
-//        kill(pid_array[5], SIGUSR1);//Blue first one
-//        i = 1;
-//        j = 5;
-//    }
-//}
-
-//void handle_sigusr2(int sig) {
-//    cout <<  "Green team player move " << location_map[j-5] << endl;
-//    fflush(stdout);
-//    if (!flag) {
-//        kill(pid_array[j], SIGUSR1);
-//    }
-//    j++;
-//    if(j == 11 && !flag) {
-//        green_team_score++;
-//        cout << "the green win" << endl;
-//        fflush(stdout);
-//        usleep(500000);
-//        flag = 0;
-//        cout << "round "<< N << " " << "has been completed" << endl;
-//        N--;
-//        if(N == 0){
-//            exit(1);
-//        }
-//        kill(pid_array[0], SIGUSR1);//Red first one
-//        kill(pid_array[5], SIGUSR1);//Blue first one
-//        i = 1;
-//        j = 5;
-//    }
-//}
-
 int main(int argc, char *argv[]) {
-//    cout << "enter the number of round that you wont,"
-//            " if you dont enter any thing the difolt number is 5" << endl;
-//    cin >> N;
 
     location_map[1] = "from A1 to A2";
     location_map[2] = "from A2 to A3";
