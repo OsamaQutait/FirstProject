@@ -1,4 +1,5 @@
 #include "header.h"
+
 pid_t parent_id;
 vector<pid_t> pid_array;
 int N = 0;
@@ -7,26 +8,29 @@ int i = 1;
 int j = 6;
 int flag = 0;
 int stop = 0;
-int rad_team_score = 0;
+int red_team_score = 0;
 int green_team_score = 0;
 
 void handle_sigusr1(int sig) {
-    cout << "Red team player move "<< location_map[i] << endl;
+    cout << RED << "Red team player move "<< location_map[i] << endl;
     fflush(stdout);
     kill(pid_array[i], SIGUSR1);
     i++;
     if(i == 6 && !stop) {
-        rad_team_score++;
+        red_team_score++;
         N++;
-        cout << "Round " << N << " finish" << endl;
+        cout << BLUE << "Round " << N << " finish" << " the red win"<< endl;
         fflush(stdout);
         stop = 1;
-        cout << "the red win"<< endl;
-        fflush(stdout);
-        if( rad_team_score >= 5 || green_team_score >= 5 ) {
-            cout << "End of game " << endl;
-            cout << "red team score "<< rad_team_score << endl;
-            cout << "green team score " << green_team_score << endl;
+        if(red_team_score >= 5 || green_team_score >= 5 ) {
+            cout << BLUE << "End of game " << endl;
+            cout << BLUE << "red team score " << red_team_score << endl;
+            cout << BLUE << "green team score " << green_team_score << endl;
+            if (red_team_score > green_team_score){
+                cout << BLUE << "the red team win" << endl;
+            } else {
+                cout << BLUE << "the green team win" << endl;
+            }
             exit(0);
         }
         i = 1;
@@ -44,22 +48,25 @@ void handle_sigusr1(int sig) {
 }
 
 void handle_sigusr2(int sig) {
-    cout <<  "Green team player move " << location_map[j-5] << endl;
+    cout << GREEN<< "Green team player move " << location_map[j-5] << endl;
     fflush(stdout);
     kill(pid_array[j], SIGUSR1);
     j++;
     if(j == 11 && !stop) {
         green_team_score++;
         N++;
-        cout << "Round " << N << " finish" << endl;
+        cout << BLUE << "Round " << N << " finish" << " the green win" << endl;
         fflush(stdout);
         stop = 1;
-        cout << "the green win"<< endl;
-        fflush(stdout);
-        if( rad_team_score >= 5 || green_team_score >= 5 ) {
-            cout << "End of game " << endl;
-            cout << "red team score "<< rad_team_score << endl;
-            cout << "green team score " << green_team_score << endl;
+        if(red_team_score >= 5 || green_team_score >= 5 ) {
+            cout << BLUE<< "End of game " << endl;
+            cout << BLUE << "red team score " << red_team_score << endl;
+            cout << BLUE << "green team score " << green_team_score << endl;
+            if (red_team_score > green_team_score){
+                cout << BLUE << "the red team win" << endl;
+            } else {
+                cout << BLUE << "the green team win" << endl;
+            }
             exit(0);
         }
         i = 1;
