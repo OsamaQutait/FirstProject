@@ -10,6 +10,7 @@ int flag = 0;
 int stop = 0;
 int red_team_score = 0;
 int green_team_score = 0;
+int round_win = 0;
 
 void handle_sigusr1(int sig) {
     cout << RED << "Red team player move "<< location_map[i] << endl;
@@ -22,7 +23,7 @@ void handle_sigusr1(int sig) {
         cout << BLUE << "Round " << N << " finish" << " the red win"<< endl;
         fflush(stdout);
         stop = 1;
-        if(red_team_score >= 5 || green_team_score >= 5 ) {
+        if(red_team_score >= round_win || green_team_score >= round_win ) {
             cout << BLUE << "End of game " << endl;
             cout << BLUE << "red team score " << red_team_score << endl;
             cout << BLUE << "green team score " << green_team_score << endl;
@@ -58,7 +59,7 @@ void handle_sigusr2(int sig) {
         cout << BLUE << "Round " << N << " finish" << " the green win" << endl;
         fflush(stdout);
         stop = 1;
-        if(red_team_score >= 5 || green_team_score >= 5 ) {
+        if(red_team_score >= round_win || green_team_score >= round_win ) {
             cout << BLUE<< "End of game " << endl;
             cout << BLUE << "red team score " << red_team_score << endl;
             cout << BLUE << "green team score " << green_team_score << endl;
@@ -84,6 +85,18 @@ void handle_sigusr2(int sig) {
 }
 
 int main(int argc, char *argv[]) {
+    cout << BLUE << "Enter the number of round that if any team win them  the game end" << endl
+    <<"if you enter -1 then the number of round will be assigned to 5" << endl;
+    cin >> round_win;
+    while (round_win <= -2 || round_win == 0) {
+        cout << BLUE << "invalid number" << endl;
+        cout << BLUE << "Enter the number of round that if any team win them  the game end" << endl
+             <<"if you enter -1 then the number of round will be assigned to 5" << endl;
+        cin >> round_win;
+    }
+    if (round_win == -1){
+        round_win = 5;
+    }
 
     location_map[1] = "from A1 to A2";
     location_map[2] = "from A2 to A3";
