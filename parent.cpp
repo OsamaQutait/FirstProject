@@ -32,6 +32,9 @@ void handle_sigusr1(int sig) {
             } else {
                 cout << BLUE << "the green team win" << endl;
             }
+            for (int id : pid_array){
+                kill(id, SIGKILL);
+            }
             exit(0);
         }
         i = 1;
@@ -67,6 +70,9 @@ void handle_sigusr2(int sig) {
                 cout << BLUE << "the red team win" << endl;
             } else {
                 cout << BLUE << "the green team win" << endl;
+            }
+            for (int id : pid_array){
+                kill(id, SIGKILL);
             }
             exit(0);
         }
@@ -143,8 +149,5 @@ int main(int argc, char *argv[]) {
     int status = 0;
     while ((wpid = wait(&status)) > 0);
 
-    for (int id : pid_array){
-        kill(id, SIGKILL);
-    }
     return 0;
 }
